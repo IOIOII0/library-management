@@ -1,8 +1,9 @@
-package main
+package database
 
 import (
 	"database/sql"
 	"fmt"
+	"os"
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -10,7 +11,7 @@ import (
 
 var db *sql.DB
 
-func initDB() {
+func InitDB() *sql.DB {
 
 	godotenv.Load()
 
@@ -35,4 +36,12 @@ func initDB() {
 	}
 
 	fmt.Println("Database connected!")
+	return db
+}
+
+func getEnv(key, fallback string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return fallback
 }
