@@ -73,8 +73,8 @@ func (r *repository) Create(b Book) error {
 func (r *repository) Update(id int, b Book) error {
 
 	_, err := r.db.Exec(
-		"UPDATE books SET title = $1, author = $2, isbn = $3, total_count = $4 WHERE id = $5",
-		b.Title, b.Author, b.ISBN, b.TotalCount, id)
+		"UPDATE books SET title = $1, author = $2, isbn = $3, total_count = $4, available_count =$5 WHERE id = $6",
+		b.Title, b.Author, b.ISBN, b.TotalCount, b.AvailableCount, id)
 
 	if err != nil {
 		return fmt.Errorf("update book %d : %w", id, err)

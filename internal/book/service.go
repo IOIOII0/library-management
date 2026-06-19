@@ -1,6 +1,5 @@
 package book
 
-
 type service struct {
 	repo Repository
 }
@@ -31,11 +30,21 @@ func (r *service) CreateBook(b Book) error {
 	if err != nil {
 		return err
 	}
-	
+
 	return nil
 }
 func (r *service) UpdateBook(id int, b Book) error {
-	err := r.repo.Update(id, b)
+	Book, err := r.repo.FindByID(id)
+	if err != nil {
+		return err
+	}
+	BookUpdate, err := Book.WithUpdatedDetails(b.Title, b.Author, b.ISBN, b.TotalCount)
+
+	if err != nil {
+		return err
+	}
+
+	err = r.repo.Update(id, BookUpdate)
 
 	if err != nil {
 		return err
@@ -48,7 +57,7 @@ func (r *service) DeleteBook(id int) error {
 		return err
 	}
 	if b.IsBorrowed() {
-		return ErrCannotDelete
+		return err
 	}
 	err = r.repo.Delete(id)
 	if err != nil {

@@ -104,6 +104,11 @@ func (h *handler) UpdateBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if errors.Is(err, ErrInvalidTotalCount) {
+		pkg.WriteError(w, http.StatusConflict, err.Error())
+		return
+	}
+
 	if err != nil {
 		pkg.WriteError(w, http.StatusInternalServerError, err.Error())
 		return
